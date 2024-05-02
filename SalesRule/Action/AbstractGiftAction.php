@@ -51,7 +51,8 @@ abstract class AbstractGiftAction
 
         $originalAppliedRuleIds = $item->getAppliedRuleIds();
 
-        if ($item->getAppliedRuleIds() !== null &&
+        if (
+            $item->getAppliedRuleIds() !== null &&
             in_array($rule->getId(), explode(',', $item->getAppliedRuleIds()))
         ) {
             return false;
@@ -62,16 +63,14 @@ abstract class AbstractGiftAction
         try {
             foreach ($freeGifts as $gift) {
                 $quote = $item->getQuote();
+
+                if ($this->ruleWasAlreadyUsed($quote, $rule)) {
+                    continue;
+                }
                 $itemQty = $gift->getQty();
 
                 if ($this->isMultipliedByProductQty()) {
-                    $itemQty = $itemQty*$item->getQty();
-                }
-
-                if (!$this->isAppliedForEveryItemInCart() &&
-                    $this->ruleWasAlreadyUsed($quote, $rule)
-                ) {
-                    continue;
+                    $itemQty = $itemQty * $item->getQty();
                 }
 
                 $addToCartRequest = $this->cartService->getAddToCartRequest($gift->getSku(), $itemQty, $gift->getDiscountPercentage());
@@ -96,7 +95,8 @@ abstract class AbstractGiftAction
 
                 $quoteItem->setIsGift(true);
 
-                if (isset($addToCartRequest['request']['custom_price']) &&
+                if (
+                    isset($addToCartRequest['request']['custom_price']) &&
                     $addToCartRequest['request']['custom_price'] == 0
                 ) {
                     $quoteItem->setCustomPrice(0);
@@ -106,7 +106,6 @@ abstract class AbstractGiftAction
 
             $item->setAppliedRuleIds($originalAppliedRuleIds);
             $this->addAppliedItemRuleId($rule->getRuleId(), $item);
-
         } catch (\Exception $e) {
             $this->logger->error(
                 sprintf('Exception occurred while adding gift product to cart. Rule: %d, Exception: %s', $rule->getId(), $e->getMessage()),
@@ -130,7 +129,7 @@ abstract class AbstractGiftAction
      * @param \Magento\Quote\Model\Quote\Item $item
      * @return void
      */
-    protected function addAppliedItemRuleId(int $ruleId, \Magento\Quote\Model\Quote\Item $item):void
+    protected function addAppliedItemRuleId(int $ruleId, \Magento\Quote\Model\Quote\Item $item): void
     {
         $appliedRules = $item->getAppliedRuleIds();
 
@@ -161,10 +160,11 @@ abstract class AbstractGiftAction
         ]);
     }
 
-    protected function ruleWasAlreadyUsed($quote, $rule):bool
+    protected function ruleWasAlreadyUsed($quote, $rule): bool
     {
         foreach ($quote->getAllItems() as $item) {
-            if ($item->getOptionByCode('rule_id') instanceof \Magento\Quote\Model\Quote\Item\Option
+            if (
+                $item->getOptionByCode('rule_id') instanceof \Magento\Quote\Model\Quote\Item\Option
                 && $item->getOptionByCode('rule_id')->getValue() == $rule->getId()
                 && !$item->isDeleted()
             ) {
@@ -186,5 +186,4 @@ abstract class AbstractGiftAction
 
     abstract protected function isAppliedForEveryItemInCart();
     abstract protected function isMultipliedByProductQty();
-
 }
