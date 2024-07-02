@@ -2,4 +2,5 @@ https://creativestyle.atlassian.net/wiki/spaces/MGSDEV/pages/2307489793/FreeGift
 
 | Our Forked Module | Original Module  |
 | ------ | ------ |
+| v1.4.0 | Based of v1.3.0 |
 | v1.3.0 | Based of v1.2.5 |
