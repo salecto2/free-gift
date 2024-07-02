@@ -9,3 +9,5 @@
 "Gift SKUs discounts","Geschenk SKUs Rabatte"
 "Gift SKUs QTYs","Geschenk SKUs Mengen"
 "Percentage discounts for gifts, separated by commas. If blank, a 100% discount will be used.","Prozentuale Rabatte für Geschenke, getrennt durch Kommata. Wenn leer, wird ein 100%-iger Rabatt verwendet."
+"Provided gift SKU does not exist in the catalog.","Der angegebene Geschenk-SKU existiert nicht im Katalog."
+"Separated by commas.","Durch Kommas getrennt."

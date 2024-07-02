@@ -57,6 +57,10 @@ class CouponRelatedGiftRemover
             $product = $this->productRepository->get($itemSku);
             $quoteItem = $quote->getItemByProduct($product);
 
+            if($quoteItem === false) {
+                continue;
+            }
+
             $appliedRules = $this->removeRuleIdFromString($couponRule, $quote->getAppliedRuleIds());
             $quoteItem->setAppliedRuleIds($appliedRules);
         }
