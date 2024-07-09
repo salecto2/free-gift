@@ -11,6 +11,7 @@
                     <item name="source" xsi:type="string">sales_rule</item>
                     <item name="dataScope" xsi:type="string">gift_skus</item>
                     <item name="sortOrder" xsi:type="number">1</item>
+                    <item name="notice" xsi:type="string" translate="true">Separated by commas</item>
                     <item name="additionalClasses" xsi:type="string">cs-csfeature__logo</item>
                 </item>
             </argument>
@@ -38,6 +39,7 @@
                     <item name="source" xsi:type="string">sales_rule</item>
                     <item name="dataScope" xsi:type="string">gift_skus_qty</item>
                     <item name="sortOrder" xsi:type="number">2</item>
+                    <item name="notice" xsi:type="string" translate="true">Separated by commas</item>
                     <item name="additionalClasses" xsi:type="string">cs-csfeature__logo</item>
                 </item>
             </argument>

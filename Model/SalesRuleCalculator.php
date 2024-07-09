@@ -97,6 +97,7 @@ class SalesRuleCalculator extends \Magento\SalesRule\Model\Validator
                 break;
             }
         }
+
         if ($isContinue) {
             return false;
         }

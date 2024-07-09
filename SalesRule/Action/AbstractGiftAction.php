@@ -62,16 +62,15 @@ abstract class AbstractGiftAction
         try {
             foreach ($freeGifts as $gift) {
                 $quote = $item->getQuote();
+
+                if ($this->ruleWasAlreadyUsed($quote, $rule)) {
+                    continue;
+                }
+
                 $itemQty = $gift->getQty();
 
                 if ($this->isMultipliedByProductQty()) {
-                    $itemQty = $itemQty*$item->getQty();
-                }
-
-                if (!$this->isAppliedForEveryItemInCart() &&
-                    $this->ruleWasAlreadyUsed($quote, $rule)
-                ) {
-                    continue;
+                    $itemQty = $itemQty * $item->getQty();
                 }
 
                 $addToCartRequest = $this->cartService->getAddToCartRequest($gift->getSku(), $itemQty, $gift->getDiscountPercentage());
