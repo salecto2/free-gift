@@ -59,15 +59,15 @@ class Cart
     /**
      * @var \MageSuite\FreeGift\Model\Factory\GetStockItemDataFactory
      */
-    protected $getStockItemDatafact;
+    protected $getStockItemDataFactory;
     /**
      * @var \MageSuite\FreeGift\Model\Factory\StockResolverFactory
      */
-    protected $stockResolver;
+    protected $stockResolverFactory;
     /**
      * @var \MageSuite\FreeGift\Model\Factory\SalesChannelFactory
      */
-    protected $saleschannel;
+    protected $salesChannelFactory;
     /**
      * @var \Magento\CatalogInventory\Api\StockRegistryInterface
      */
@@ -91,9 +91,9 @@ class Cart
      * @param \Magento\CatalogInventory\Api\StockStateInterface $stockState
      * @param \Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\QuoteItemQtyList $quoteItemQtyList
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \MageSuite\FreeGift\Model\Factory\StockResolverFactory $stockResolver
-     * @param \MageSuite\FreeGift\Model\Factory\GetStockItemDataFactory $getStockItemDatafact
-     * @param \MageSuite\FreeGift\Model\Factory\SalesChannelFactory $saleschannel
+     * @param \MageSuite\FreeGift\Model\Factory\StockResolverFactory $stockResolverFactory
+     * @param \MageSuite\FreeGift\Model\Factory\GetStockItemDataFactory $getStockItemDataFactory
+     * @param \MageSuite\FreeGift\Model\Factory\SalesChannelFactory $salesChannelFactory
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \MageSuite\FreeGift\Model\ConfigProvider $configProvider
      */
@@ -111,9 +111,9 @@ class Cart
         \Magento\CatalogInventory\Api\StockStateInterface $stockState,
         \Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\QuoteItemQtyList $quoteItemQtyList,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \MageSuite\FreeGift\Model\Factory\StockResolverFactory $stockResolver,
-        \MageSuite\FreeGift\Model\Factory\GetStockItemDataFactory $getStockItemDatafact,
-        \MageSuite\FreeGift\Model\Factory\SalesChannelFactory $saleschannel,
+        \MageSuite\FreeGift\Model\Factory\StockResolverFactory $stockResolverFactory,
+        \MageSuite\FreeGift\Model\Factory\GetStockItemDataFactory $getStockItemDataFactory,
+        \MageSuite\FreeGift\Model\Factory\SalesChannelFactory $salesChannelFactory,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \MageSuite\FreeGift\Model\ConfigProvider $configProvider
 
@@ -132,9 +132,9 @@ class Cart
         $this->stockState = $stockState;
         $this->quoteItemQtyList = $quoteItemQtyList;
         $this->scopeConfig = $scopeConfig;
-        $this->stockResolver = $stockResolver;
-        $this->getStockItemDatafact = $getStockItemDatafact;
-        $this->saleschannel = $saleschannel;
+        $this->stockResolverFactory = $stockResolverFactory;
+        $this->getStockItemDataFactory = $getStockItemDataFactory;
+        $this->salesChannelFactory = $salesChannelFactory;
         $this->stockRegistry = $stockRegistry;
         $this->configProvider = $configProvider;
     }
@@ -271,15 +271,15 @@ class Cart
      */
     protected function determineQty($requestedQty, $product)
     {
-        $salesChannel = $this->saleschannel->create();
-        $getStockItemDatafact = $this->getStockItemDatafact->create();
-        $stockResolver = $this->stockResolver->create();
+        $salesChannel = $this->salesChannelFactory->create();
+        $getStockItemData = $this->getStockItemDataFactory->create();
+        $stockResolver = $this->stockResolverFactory->create();
 
         $availableQuantity = 0.0;
 
         $websiteCode = $product->getStore()->getWebsite()->getCode();
         $stockId = $stockResolver->execute($salesChannel::TYPE_WEBSITE, $websiteCode)->getStockId();
-        $stockItemData =$getStockItemDatafact->execute($product->getSku(), $stockId);
+        $stockItemData =$getStockItemData->execute($product->getSku(), $stockId);
 
         if (isset($stockItemData['quantity'])) {
             $availableQuantity = $stockItemData['quantity'];
@@ -311,7 +311,7 @@ class Cart
     /**
      * Get determineQty without MSI module
      *
-     * @param $qty
+     * @param $requestedQty
      * @param $product
      * @return float
      */
