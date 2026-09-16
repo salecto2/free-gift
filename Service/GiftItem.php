@@ -41,17 +41,30 @@ class GiftItem
     public function removeRuleIdFromAllQuoteItems(\Magento\Quote\Api\Data\CartInterface $quote, int $ruleId): void
     {
         foreach ($quote->getAllItems() as $item) {
+            $appliedRuleIds = (string)$item->getAppliedRuleIds();
+            if ($appliedRuleIds === '') {
+                continue;
+            }
+
+            $isChanged = false;
             $filteredRuleIds = [];
-            foreach (explode(',', (string)$item->getAppliedRuleIds()) as $appliedRule) {
+            foreach (explode(',', $appliedRuleIds) as $appliedRule) {
                 $appliedRuleId = (int)trim($appliedRule);
-                if ($appliedRuleId <= 0 || $appliedRuleId === $ruleId) {
+                if ($appliedRuleId <= 0) {
+                    continue;
+                }
+
+                if ($appliedRuleId === $ruleId) {
+                    $isChanged = true;
                     continue;
                 }
 
                 $filteredRuleIds[] = $appliedRuleId;
             }
 
-            $item->setAppliedRuleIds(implode(',', array_unique($filteredRuleIds)));
+            if ($isChanged) {
+                $item->setAppliedRuleIds(!empty($filteredRuleIds) ? implode(',', array_unique($filteredRuleIds)) : null);
+            }
         }
     }
 

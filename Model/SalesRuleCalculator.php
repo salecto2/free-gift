@@ -142,7 +142,7 @@ class SalesRuleCalculator extends \Magento\SalesRule\Model\Validator
     {
         if ($this->giftItem === null) {
             $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-            $this->giftItem = $objectManager->get(\MageSuite\FreeGift\Service\GiftItem::class);
+            $this->giftItem = $objectManager->get(\MageSuite\FreeGift\Service\GiftItem::class); //phpcs:ignore
         }
 
         return $this->giftItem;
