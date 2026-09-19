@@ -205,7 +205,7 @@ class Cart
     public function getAddToCartRequest(string $sku, $qty, $discount = null)
     {
         $storeId = \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Store\Model\StoreManagerInterface::class)->getStore()->getId();
-        $product = $this->productRepository->get($sku, false, $storeId);
+        $product = $this->productRepository->get($sku, false, $storeId, true);
 
         $parentProductsIds = $this->configurableProduct->getParentIdsByChild($product->getId());
         $parentProductId = !empty($parentProductsIds) ? $parentProductsIds[0] : null;
